@@ -15,14 +15,10 @@
 # 7. Delete Record
 # 8. Exit
 
-
 # START PROGRAM
-
 import datetime as dt
 import random
 import string     
-
-
 
 def generate_doc_id():
     timestamp = dt.datetime.now().strftime("%Y%m%d-%H%M%S")
@@ -59,11 +55,12 @@ def update_doc(records):
     else:
       break
 
-
 def change_status(records, stats):
-   doc = input("Enter Document ID: ")
+   doc = input("\nEnter Document ID: ")
+    
    for record in records:
     if record['ID'] == doc:
+        
       record['Status'] = stats
       print(f"Document has been {stats}.")
       return
@@ -71,10 +68,11 @@ def change_status(records, stats):
    print("Document not found.")
 
 def delete_record(records):
-   doc_id = input("Enter Document ID to delete: ")
+   doc_id = input("\nEnter Document ID to delete: ")
 
    for i, record in enumerate(records): # get index and value
     if record['ID'] == doc_id:
+        
       records.pop(i)
       print(f"Document {doc_id} has been deleted.")
       return
@@ -85,18 +83,18 @@ records = []
 
 while True:
 
-  print('===== DOCUMENT RELEASING SYSTEM =====')
+  print('\n===== DOCUMENT RELEASING SYSTEM =====')
   print('1) Register Document') 
   print('2) Update / Release / Return / Delete Document')
   print('3) Display All Documents')
   print('4) Search Document')
   print('5) Exit')
 
-  select = int(input('Select a number (1-5): '))
+  select = int(input('\nSelect a number (1-5): '))
   
   if select == 1: #register
     id = generate_doc_id()
-    name = input('Document Name: ')
+    name = input('\nDocument Name: ')
     req = input('Requester Name: ')
     date = dt.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
@@ -112,27 +110,27 @@ while True:
 
     records.append(new_record) #adds new record
 
-    print('Document successfully registered.')
+    print('\nDocument successfully registered.')
     print('Document ID:', id )
 
 #----------------------------------------------------
   
   elif select == 2: #update/release/return/delete
     if len(records) == 0:
-      print('No records available')
+      print('\nNo records available')
       continue
 
     else:
-      print('1) Update: \n' \
-      '2) Release: \n' \
+      print('\n1) Update \n' \
+      '2) Release \n' \
       '3) Return \n' \
       '4) Delete'
       )
 
-      choice = int(input('Select a number (1 - 4): '))
+      choice = int(input('\nSelect a number (1 - 4): '))
 
-#************************************************
-
+#----------------------------------------------------
+        
       if choice == 1: # updating document
         update_doc(records)
   
@@ -145,7 +143,6 @@ while True:
       elif choice == 4:
         delete_record(records)
         
-
 # --------------------------------------------------------
 
   elif select == 3:
@@ -154,36 +151,38 @@ while True:
 
     else:
       for record in records:
+        print("\n------------------------------------------")
         print("Document ID:", record["ID"])
         print("Document Name:", record["Document Name"])
         print("Requester:", record["Requester"])
         print("Date Requested:", record['Date Requested'])
         print("Status:", record["Status"])
-        print("----------------------")
+        print("------------------------------------------")
 
 #-------------------------
+    
   elif select == 4:
-    search = input("Enter Document ID: ")
+    search = input("\nEnter Document ID: ")
 
     found = False
 
     for record in records:
       if record["ID"] == search:
+        print("\n------------------------------------------")
         print("Document ID:", record["ID"])
         print("Document Name:", record["Document Name"])
         print("Requester:", record["Requester"])
         print("Date Requested:", record['Date Requested'])
         print("Status:", record["Status"])
-        print("----------------------")
+        print("------------------------------------------")
         found = True
         break
     
     if not found:
       print("Record not found")
         
-
   elif select == 5:
-    print("Exiting program...")
+    print("\nExiting program...")
     break
 
   else:
