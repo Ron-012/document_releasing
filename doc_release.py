@@ -56,16 +56,24 @@ def update_doc(records):
       break
 
 def change_status(records, stats):
-   doc = input("\nEnter Document ID: ")
-    
-   for record in records:
-    if record['ID'] == doc:
-        
-      record['Status'] = stats
-      print(f"Document has been {stats}.")
-      return
-    
-   print("Document not found.")
+  doc = input("\nEnter Document ID: ")
+
+  for record in records:
+      if record['ID'] == doc:
+
+          if stats == 'Released' and record['Status'] != 'Pending':
+              print(f"Cannot release a document with status '{record['Status']}'.")
+              return
+
+          if stats == 'Returned' and record['Status'] != 'Released':
+              print(f"Cannot return a document with status '{record['Status']}'.")
+              return
+
+          record['Status'] = stats
+          print(f"Document has been {stats}.")
+          return
+
+  print("Document not found.")
 
 def delete_record(records):
    doc_id = input("\nEnter Document ID to delete: ")
@@ -90,12 +98,33 @@ while True:
   print('4) Search Document')
   print('5) Exit')
 
-  select = int(input('\nSelect a number (1-5): '))
+  try:
+    select = int(input('\nSelect a number (1-5): '))
+  except ValueError:
+    print("Invalid input. Please enter a number.")
+    continue
   
   if select == 1: #register
     id = generate_doc_id()
-    name = input('\nDocument Name: ')
-    req = input('Requester Name: ')
+
+    while True:
+        name = input('\nDocument Name: ').strip()
+        if not name:
+            print("Document name cannot be empty.")
+        elif not any(c.isalpha() for c in name):
+            print("Document name must contain at least one letter.")
+        else:
+            break
+
+    while True:
+        req = input('Requester Name: ').strip()
+        if not req:
+            print("Requester name cannot be empty.")
+        elif not req.replace(" ", "").isalpha():
+            print("Requester name must contain letters only.")
+        else:
+            break
+
     date = dt.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
     status = 'Pending'    
@@ -127,7 +156,11 @@ while True:
       '4) Delete'
       )
 
-      choice = int(input('\nSelect a number (1 - 4): '))
+      try:
+        choice = int(input('\nSelect a number (1-5): '))
+      except ValueError:
+        print("Invalid input. Please enter a number.")
+        continue
 
 #----------------------------------------------------
         
@@ -142,6 +175,9 @@ while True:
 
       elif choice == 4:
         delete_record(records)
+
+      else:
+        print("Invalid Choice.")
         
 # --------------------------------------------------------
 
@@ -182,7 +218,7 @@ while True:
       print("Record not found")
         
   elif select == 5:
-    print("\nExiting program...")
+    print("\nProgram Exited")
     break
 
   else:
